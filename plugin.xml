@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-usage-stats-manager" version="0.0.1">
+    <name>usage-stats-manager</name>
+    <js-module name="usage-stats-manager" src="www/usage-stats-manager.js">
+        <clobbers target="cordova.plugins.usage-stats-manager" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="MyUsageStatsManager">
+                <param name="android-package" value="com.mobileaccord.geopoll.plugins.MyUsageStatsManager" />
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
+        </config-file>
+        <source-file src="src/android/MyUsageStatsManager.java" target-dir="src/com/mobileaccord/geopoll/plugins" />
+    </platform>
+</plugin>
