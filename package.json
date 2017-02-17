@@ -1,0 +1,25 @@
+{
+  "name": "usage-stats-manager",
+  "version": "0.0.1",
+  "description": "Cordova Android plugin for accessing UsageStatsManager API",
+  "cordova": {
+    "id": "cordova-plugin-usage-stats-manager",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koros/cordova-usage-stats-manager.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Koros G",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/koros/cordova-usage-stats-manager/issues"
+  },
+  "homepage": "https://github.com/koros/cordova-usage-stats-manager#readme"
+}

@@ -40,24 +40,41 @@ public class MyUsageStatsManager extends CordovaPlugin {
             String arg = args.getString(0);
             this.getUsageStatistics(arg, callbackContext);
             return true;
+        }else if(action.equals("launchUsageStatsManagerPermissionSettings")){
+            this.launchUsageStatsManagerPermissionSettings(callbackContext);
+            return true;
         }
         return false;
     }
 
     private void getUsageStatistics(String interval, CallbackContext callbackContext) {
-        Log.i(LOG_TAG, interval);
-        StatsUsageInterval statsUsageInterval = StatsUsageInterval.getValue(interval);
-        List<UsageStats> usageStatsList = new ArrayList<UsageStats>();
-        if (statsUsageInterval != null) {
-            usageStatsList = queryUsageStatistics(statsUsageInterval.mInterval);
-            Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+        try{
+            Log.i(LOG_TAG, interval);
+            StatsUsageInterval statsUsageInterval = StatsUsageInterval.getValue(interval);
+            List<UsageStats> usageStatsList = new ArrayList<UsageStats>();
+            if (statsUsageInterval != null) {
+                usageStatsList = queryUsageStatistics(statsUsageInterval.mInterval);
+                Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
+            }
+            JSONArray jsonArray = new JSONArray();
+            for (UsageStats stat : usageStatsList){
+                JSONObject obj = toJSON(stat);
+                jsonArray.put(obj);
+            }
+
+            String result = jsonArray.toString();
+            Log.d(LOG_TAG, result);
+            callbackContext.success(result);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            callbackContext.error(e.toString());
         }
-        callbackContext.success(usageStatsList.toString());
     }
 
 
     /**
-     * Returns the {@link #mRecyclerView} including the time span specified by the
+     * Returns the List of UsageStats including the time span specified by the
      * intervalType argument.
      *
      * @param intervalType The time interval by which the stats are aggregated.
@@ -71,16 +88,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
         // Get the app statistics since one year ago from the current time.
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -1);
-
         List<UsageStats> queryUsageStats = mUsageStatsManager.queryUsageStats(intervalType, cal.getTimeInMillis(), System.currentTimeMillis());
-
-        if (queryUsageStats.size() == 0) {
-            Log.i(LOG_TAG, "The user may not allow the access to apps usage. ");
-            Context context = this.cordova.getActivity().getApplicationContext(); 
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-        }
         return queryUsageStats;
     }
 
@@ -89,7 +97,6 @@ public class MyUsageStatsManager extends CordovaPlugin {
      * last time the app was used in the descendant order.
      */
     private static class LastTimeLaunchedComparatorDesc implements Comparator<UsageStats> {
-
         @Override
         public int compare(UsageStats left, UsageStats right) {
             return Long.compare(right.getLastTimeUsed(), left.getLastTimeUsed());
@@ -124,6 +131,42 @@ public class MyUsageStatsManager extends CordovaPlugin {
             }
             return null;
         }
+    }
+
+    /**
+     * Converts UsageStats into a JSONObject
+     * @param usageStats
+     * @return
+     * @throws Exception
+     */
+    public static JSONObject toJSON(UsageStats usageStats) throws Exception{
+        JSONObject object= new JSONObject();
+        object.put("PackageName", usageStats.getPackageName());
+        object.put("FirstTimeStamp", usageStats.getFirstTimeStamp());
+        object.put("LastTimeStamp", usageStats.getLastTimeStamp());
+        object.put("LastTimeUsed", usageStats.getLastTimeUsed());
+        object.put("TotalTimeInForeground", usageStats.getTotalTimeInForeground());
+        return object;
+    }
+
+    /**
+     * Launch UsageStatsManager settings
+     * @return
+     */
+    private void launchUsageStatsManagerPermissionSettings(CallbackContext callbackContext){
+        try {
+
+            Context context = this.cordova.getActivity().getApplicationContext(); 
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            callbackContext.success("OK");
+
+        } catch(Exception e){
+            e.printStackTrace();
+            callbackContext.error(e.toString());
+        }
+        
     }
 
 }
