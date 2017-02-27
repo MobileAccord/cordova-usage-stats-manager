@@ -24,6 +24,6 @@ var error = function(error){
 	console.log("Error :: " + error);
 };
 
-UsageStatistics.launchUsageStatsManagerPermissionSettings(success, error);
+UsageStatistics.openPermissionSettings(success, error);
 
 ```
