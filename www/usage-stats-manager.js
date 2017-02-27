@@ -7,8 +7,8 @@ window.UsageStatistics = {
     	exec(success, error, "MyUsageStatsManager", "getUsageStatistics", array);
     },
     
-	launchUsageStatsManagerPermissionSettings: function(success, error) {
-		console.log("launchUsageStatsManagerPermissionSettings() :: ");
-    	exec(success, error, "MyUsageStatsManager", "launchUsageStatsManagerPermissionSettings", null);
+	openPermissionSettings: function(success, error) {
+		console.log("openPermissionSettings() :: ");
+    	exec(success, error, "MyUsageStatsManager", "openPermissionSettings", null);
 	}
 };

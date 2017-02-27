@@ -40,8 +40,8 @@ public class MyUsageStatsManager extends CordovaPlugin {
             String arg = args.getString(0);
             this.getUsageStatistics(arg, callbackContext);
             return true;
-        }else if(action.equals("launchUsageStatsManagerPermissionSettings")){
-            this.launchUsageStatsManagerPermissionSettings(callbackContext);
+        }else if(action.equals("openPermissionSettings")){
+            this.openPermissionSettings(callbackContext);
             return true;
         }
         return false;
@@ -153,7 +153,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
      * Launch UsageStatsManager settings
      * @return
      */
-    private void launchUsageStatsManagerPermissionSettings(CallbackContext callbackContext){
+    private void openPermissionSettings(CallbackContext callbackContext){
         try {
 
             Context context = this.cordova.getActivity().getApplicationContext(); 
