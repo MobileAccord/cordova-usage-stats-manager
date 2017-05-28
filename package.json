@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koros/cordova-usage-stats-manager.git"
+    "url": "git+https://github.com/les-buchanan/cordova-usage-stats-manager.git"
   },
   "keywords": [
     "ecosystem:cordova",
     "cordova-android"
   ],
-  "author": "Koros G",
+  "author": "Les Buchanan / Koros G",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/koros/cordova-usage-stats-manager/issues"
+    "url": "https://github.com/les-buchanan/cordova-usage-stats-manager/issues"
   },
-  "homepage": "https://github.com/koros/cordova-usage-stats-manager#readme"
+  "homepage": "https://github.com/les-buchanan/cordova-usage-stats-manager#readme"
 }
