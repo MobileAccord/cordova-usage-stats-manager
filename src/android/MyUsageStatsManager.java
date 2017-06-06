@@ -92,7 +92,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
     public List<UsageStats> queryUsageStatistics(int intervalType) {
         // Get the app statistics since one year ago from the current time.
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.DAY_OF_MONTH, -28);
         List<UsageStats> queryUsageStats = mUsageStatsManager.queryUsageStats(intervalType, cal.getTimeInMillis(), System.currentTimeMillis());
         return queryUsageStats;
     }
