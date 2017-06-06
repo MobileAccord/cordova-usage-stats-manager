@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,7 +26,7 @@ import android.content.Context;
 
 
 /**
- * 
+ *
  */
 public class MyUsageStatsManager extends CordovaPlugin {
 
@@ -33,9 +34,12 @@ public class MyUsageStatsManager extends CordovaPlugin {
 
     UsageStatsManager mUsageStatsManager;
 
+    public PackageManager packMan;
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         mUsageStatsManager = (UsageStatsManager) this.cordova.getActivity().getApplicationContext().getSystemService("usagestats"); //Context.USAGE_STATS_SERVICE
+        packMan = this.cordova.getActivity().getApplicationContext().getPackageManager();
         if (action.equals("getUsageStatistics")) {
             String arg = args.getString(0);
             this.getUsageStatistics(arg, callbackContext);
@@ -56,6 +60,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
                 usageStatsList = queryUsageStatistics(statsUsageInterval.mInterval);
                 Collections.sort(usageStatsList, new LastTimeLaunchedComparatorDesc());
             }
+
             JSONArray jsonArray = new JSONArray();
             for (UsageStats stat : usageStatsList){
                 JSONObject obj = toJSON(stat);
@@ -87,7 +92,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
     public List<UsageStats> queryUsageStatistics(int intervalType) {
         // Get the app statistics since one year ago from the current time.
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.DAY_OF_MONTH, -28);
         List<UsageStats> queryUsageStats = mUsageStatsManager.queryUsageStats(intervalType, cal.getTimeInMillis(), System.currentTimeMillis());
         return queryUsageStats;
     }
@@ -139,9 +144,10 @@ public class MyUsageStatsManager extends CordovaPlugin {
      * @return
      * @throws Exception
      */
-    public static JSONObject toJSON(UsageStats usageStats) throws Exception{
+    public JSONObject toJSON(UsageStats usageStats) throws Exception{
         JSONObject object= new JSONObject();
         object.put("PackageName", usageStats.getPackageName());
+        object.put("AppName", getAppName(usageStats.getPackageName()));
         object.put("FirstTimeStamp", usageStats.getFirstTimeStamp());
         object.put("LastTimeStamp", usageStats.getLastTimeStamp());
         object.put("LastTimeUsed", usageStats.getLastTimeUsed());
@@ -156,7 +162,7 @@ public class MyUsageStatsManager extends CordovaPlugin {
     private void openPermissionSettings(CallbackContext callbackContext){
         try {
 
-            Context context = this.cordova.getActivity().getApplicationContext(); 
+            Context context = this.cordova.getActivity().getApplicationContext();
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
@@ -166,7 +172,18 @@ public class MyUsageStatsManager extends CordovaPlugin {
             e.printStackTrace();
             callbackContext.error(e.toString());
         }
-        
+
     }
 
+    public String getAppName(String packageName) {
+        ApplicationInfo ai;
+
+        try {
+            ai = packMan.getApplicationInfo(packageName, 0);
+        } catch (Exception e) {
+            ai = null;
+        }
+
+        return (String) (ai != null ? packMan.getApplicationLabel(ai) : "(unknown)");
+    }
 }
