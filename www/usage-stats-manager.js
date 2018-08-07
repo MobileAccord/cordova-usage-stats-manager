@@ -9,6 +9,7 @@ window.UsageStatistics = {
     
 	openPermissionSettings: function(success, error) {
 		console.log("openPermissionSettings() :: ");
-    	exec(success, error, "MyUsageStatsManager", "openPermissionSettings", null);
+		var array = []; // not needed but seems to throw exceptions on some cases if not included.
+    	exec(success, error, "MyUsageStatsManager", "openPermissionSettings", array);
 	}
 };
