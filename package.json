@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koros/cordova-usage-stats-manager.git"
+    "url": "git+https://github.com/MobileAccord/cordova-usage-stats-manager.git"
   },
   "keywords": [
     "ecosystem:cordova",
@@ -19,7 +19,7 @@
   "author": "Koros G",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/koros/cordova-usage-stats-manager/issues"
+    "url": "https://github.com/MobileAccord/cordova-usage-stats-manager/issues"
   },
-  "homepage": "https://github.com/koros/cordova-usage-stats-manager#readme"
+  "homepage": "https://github.com/MobileAccord/cordova-usage-stats-manager#readme"
 }
